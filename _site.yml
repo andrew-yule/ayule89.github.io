@@ -1,0 +1,5 @@
+name: "Andrew Yule"
+navbar:
+  left:
+    - text: "Home"
+      href: index.html
