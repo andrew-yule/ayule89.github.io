@@ -1,5 +1,6 @@
 name: "Andrew Yule"
 navbar:
+  title: "Andrew Yule"
   left:
     - text: "Home"
       href: index.html
