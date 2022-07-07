@@ -271,6 +271,8 @@ $(document).ready(function () {
 </div>
 
 
+<p>To view an interactive shinny app of a portion of this analysis
+please visit this <a href="www.google.com">here</a>.</p>
 <pre class="r"><code>library(tidyverse)
 library(maps)
 library(gridExtra)
@@ -337,24 +339,24 @@ information where a matching beer is found.</p>
 
 beers |&gt; head(n = 6)</code></pre>
 <pre><code>## # A tibble: 6 × 10
-##   Beer                Beer_ID   ABV   IBU Brewery_id Style                          Ounces Brewery     City  State
-##   &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                           &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;
-## 1 Pub Beer               1436   5      NA        409 American Pale Lager                12 10 Barrel … Bend  OR   
-## 2 Devil&#39;s Cup            2265   6.6    NA        178 American Pale Ale (APA)            12 18th Stree… Gary  IN   
-## 3 Rise of the Phoenix    2264   7.1    NA        178 American IPA                       12 18th Stree… Gary  IN   
-## 4 Sinister               2263   9      NA        178 American Double / Imperial IPA     12 18th Stree… Gary  IN   
-## 5 Sex and Candy          2262   7.5    NA        178 American IPA                       12 18th Stree… Gary  IN   
-## 6 Black Exodus           2261   7.7    NA        178 Oatmeal Stout                      12 18th Stree… Gary  IN</code></pre>
+##   Beer           Beer_ID   ABV   IBU Brewery_id Style Ounces Brewery City  State
+##   &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
+## 1 Pub Beer          1436   5      NA        409 Amer…     12 10 Bar… Bend  OR   
+## 2 Devil&#39;s Cup       2265   6.6    NA        178 Amer…     12 18th S… Gary  IN   
+## 3 Rise of the P…    2264   7.1    NA        178 Amer…     12 18th S… Gary  IN   
+## 4 Sinister          2263   9      NA        178 Amer…     12 18th S… Gary  IN   
+## 5 Sex and Candy     2262   7.5    NA        178 Amer…     12 18th S… Gary  IN   
+## 6 Black Exodus      2261   7.7    NA        178 Oatm…     12 18th S… Gary  IN</code></pre>
 <pre class="r"><code>beers |&gt; tail(n = 6)</code></pre>
 <pre><code>## # A tibble: 6 × 10
-##   Beer                        Beer_ID   ABV   IBU Brewery_id Style                    Ounces Brewery   City  State
-##   &lt;chr&gt;                         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;
-## 1 Rocky Mountain Oyster Stout    1035   7.5    NA        425 American Stout               12 Wynkoop … Denv… CO   
-## 2 Belgorado                       928   6.7    45        425 Belgian IPA                  12 Wynkoop … Denv… CO   
-## 3 Rail Yard Ale                   807   5.2    NA        425 American Amber / Red Ale     12 Wynkoop … Denv… CO   
-## 4 B3K Black Lager                 620   5.5    NA        425 Schwarzbier                  12 Wynkoop … Denv… CO   
-## 5 Silverback Pale Ale             145   5.5    40        425 American Pale Ale (APA)      12 Wynkoop … Denv… CO   
-## 6 Rail Yard Ale (2009)             84   5.2    NA        425 American Amber / Red Ale     12 Wynkoop … Denv… CO</code></pre>
+##   Beer           Beer_ID   ABV   IBU Brewery_id Style Ounces Brewery City  State
+##   &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
+## 1 Rocky Mountai…    1035   7.5    NA        425 Amer…     12 Wynkoo… Denv… CO   
+## 2 Belgorado          928   6.7    45        425 Belg…     12 Wynkoo… Denv… CO   
+## 3 Rail Yard Ale      807   5.2    NA        425 Amer…     12 Wynkoo… Denv… CO   
+## 4 B3K Black Lag…     620   5.5    NA        425 Schw…     12 Wynkoo… Denv… CO   
+## 5 Silverback Pa…     145   5.5    40        425 Amer…     12 Wynkoo… Denv… CO   
+## 6 Rail Yard Ale…      84   5.2    NA        425 Amer…     12 Wynkoo… Denv… CO</code></pre>
 </div>
 <div id="address-the-missing-values-in-each-column."
 class="section level3">
@@ -365,8 +367,10 @@ The highest number of missing values was found for the IBU variable (42%
 of values are missing). The high amount of missing values for IBU should
 be considered in any further analysis involving this variable.</p>
 <pre class="r"><code>(colSums(is.na(beers))/dim(beers)[1])*100</code></pre>
-<pre><code>##       Beer    Beer_ID        ABV        IBU Brewery_id      Style     Ounces    Brewery       City      State 
-##  0.0000000  0.0000000  2.5726141 41.7012448  0.0000000  0.2074689  0.0000000  0.0000000  0.0000000  0.0000000</code></pre>
+<pre><code>##       Beer    Beer_ID        ABV        IBU Brewery_id      Style     Ounces 
+##  0.0000000  0.0000000  2.5726141 41.7012448  0.0000000  0.2074689  0.0000000 
+##    Brewery       City      State 
+##  0.0000000  0.0000000  0.0000000</code></pre>
 </div>
 <div
 id="compute-the-median-alcohol-content-and-international-bitterness-unit-for-each-state.-plot-a-bar-chart-to-compare.-which-state-has-the-maximum-alcoholic-abv-beer-which-state-has-the-most-bitter-ibu-beer"
@@ -434,14 +438,14 @@ grid.arrange(p1, p2)</code></pre>
 <p>The absolute maximum ABV and IBU for any state</p>
 <pre class="r"><code>slice_max(beers, ABV, n = 1)</code></pre>
 <pre><code>## # A tibble: 1 × 10
-##   Beer                                             Beer_ID   ABV   IBU Brewery_id Style Ounces Brewery City  State
-##   &lt;chr&gt;                                              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
-## 1 Lee Hill Series Vol. 5 - Belgian Style Quadrupe…    2565  12.8    NA         52 Quad…   19.2 Upslop… Boul… CO</code></pre>
+##   Beer           Beer_ID   ABV   IBU Brewery_id Style Ounces Brewery City  State
+##   &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
+## 1 Lee Hill Seri…    2565  12.8    NA         52 Quad…   19.2 Upslop… Boul… CO</code></pre>
 <pre class="r"><code>slice_max(beers, IBU, n = 1)</code></pre>
 <pre><code>## # A tibble: 1 × 10
-##   Beer                      Beer_ID   ABV   IBU Brewery_id Style                        Ounces Brewery City  State
-##   &lt;chr&gt;                       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                         &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
-## 1 Bitter Bitch Imperial IPA     980   8.2   138        375 American Double / Imperial …     12 Astori… Asto… OR</code></pre>
+##   Beer           Beer_ID   ABV   IBU Brewery_id Style Ounces Brewery City  State
+##   &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
+## 1 Bitter Bitch …     980   8.2   138        375 Amer…     12 Astori… Asto… OR</code></pre>
 </div>
 <div
 id="comment-on-the-summary-statistics-and-distribution-of-the-abv-variable."

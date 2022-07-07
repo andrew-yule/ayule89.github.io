@@ -7,6 +7,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+To view an interactive shinny app of a portion of this analysis please visit this [here](www.google.com).
+
 ```{r include=TRUE, echo=TRUE, results='hide', error=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(maps)
