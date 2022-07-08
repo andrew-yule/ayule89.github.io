@@ -11,32 +11,41 @@ library(tidyverse)
 library(shiny)
 
 # Set the theme
-theme_set(theme_bw())
+#theme_set(theme_bw())
+theme_set(theme_bw(base_size = 18))
+#theme_set(element_text(size=18))
 
 # Load the beers data set
 beers = read_csv("https://www.wolframcloud.com/obj/andrew.yule/DDS_Beers")
 
+# Helper function for creating the ggplot object to be displayed by renderPlot
+createPlot = function(var = "IBU", histOrBox = "Histogram", binCount = 30){
+  plot = if(var == "IBU" && histOrBox == "Histogram") {
+    ggplot(beers, aes(x = IBU)) +
+      geom_histogram(fill = "#C80F2D", bins = binCount) +
+      labs(title = "Distribution of IBU Values Across Beers")
+  } else if(var == "IBU" && histOrBox == "BoxPlot"){
+    ggplot(beers, aes(y = IBU)) +
+      geom_boxplot(fill = "#C80F2D") +
+      labs(title = "Distribution of IBU Values Across Beers")
+  } else if(var == "ABV" && histOrBox == "Histogram") {
+    ggplot(beers, aes(x = ABV)) +
+      geom_histogram(fill = "#C80F2D", bins = binCount) +
+      labs(title = "Distribution of ABV Values Across Beers")
+  } else if(var == "ABV" && histOrBox == "BoxPlot"){
+    ggplot(beers, aes(y = ABV)) +
+      geom_boxplot(fill = "#C80F2D") +
+      labs(title = "Distribution of ABV Values Across Beers")
+  }
+  
+  return(plot)
+}
+
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  output$hist <- renderPlot({
+  output$plot <- renderPlot({
     # Draw the histogram with the specified number of bins based on user's preference for IBU or ABV
-    # plot = beers |>
-    #   ggplot(aes(x = ABV)) +
-    #   geom_histogram(fill = "#C80F2D", bins = input$uiBins) +
-    #   labs(x = "ABV (%)", y = "Frequency", title = "Distribution of ABV Values Across Beers") +
-    #   theme(text=element_text(size=18))
-    print(input$uiIBUOrABV)
-    plot = if(input$uiIBUOrABV == "IBU") {
-      ggplot(beers, aes(x = IBU)) +
-        geom_histogram(fill = "#C80F2D", bins = input$uiBins) +
-        labs(x = "IBU (-)", y = "Frequency", title = "Distribution of IBU Values Across Beers") +
-        theme(text=element_text(size=18))
-      } else {
-        ggplot(beers, aes(x = ABV)) +
-          geom_histogram(fill = "#C80F2D", bins = input$uiBins) +
-          labs(x = "ABV (%)", y = "Frequency", title = "Distribution of ABV Values Across Beers") +
-          theme(text=element_text(size=18))
-      }
+    plot = createPlot(input$uiIBUOrABV, input$uiHistOrBox, input$uiBins)
     plot
   })
 })
