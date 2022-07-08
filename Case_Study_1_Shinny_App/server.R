@@ -18,12 +18,25 @@ beers = read_csv("https://www.wolframcloud.com/obj/andrew.yule/DDS_Beers")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  output$Hist_ABV <- renderPlot({
-    # Draw the histogram with the specified number of bins
-    beers |>
-      ggplot(aes(x = ABV)) +
-      geom_histogram(fill = "#C80F2D", bins = input$uiBins) +
-      labs(x = "ABV (%)", y = "Frequency", title = "Distribution of ABV Values Across Beers") +
-      theme(text=element_text(size=18))
+  output$hist <- renderPlot({
+    # Draw the histogram with the specified number of bins based on user's preference for IBU or ABV
+    # plot = beers |>
+    #   ggplot(aes(x = ABV)) +
+    #   geom_histogram(fill = "#C80F2D", bins = input$uiBins) +
+    #   labs(x = "ABV (%)", y = "Frequency", title = "Distribution of ABV Values Across Beers") +
+    #   theme(text=element_text(size=18))
+    print(input$uiIBUOrABV)
+    plot = if(input$uiIBUOrABV == "IBU") {
+      ggplot(beers, aes(x = IBU)) +
+        geom_histogram(fill = "#C80F2D", bins = input$uiBins) +
+        labs(x = "IBU (-)", y = "Frequency", title = "Distribution of IBU Values Across Beers") +
+        theme(text=element_text(size=18))
+      } else {
+        ggplot(beers, aes(x = ABV)) +
+          geom_histogram(fill = "#C80F2D", bins = input$uiBins) +
+          labs(x = "ABV (%)", y = "Frequency", title = "Distribution of ABV Values Across Beers") +
+          theme(text=element_text(size=18))
+      }
+    plot
   })
 })

@@ -17,9 +17,12 @@ shinyUI(fluidPage(
 
     # Sidebar with a slider input for number of bins
     sidebarLayout(
-        sidebarPanel(sliderInput("uiBins", "Number of bins:", min = 1, max = 50, value = 30)),
+        sidebarPanel(
+          radioButtons("uiIBUOrABV", "IBU or ABV", choices = c("IBU", "ABV"), inline = TRUE),
+          sliderInput("uiBins", "Number of bins:", min = 1, max = 50, value = 30)
+        ),
 
         # Show a plot of the generated distribution
-        mainPanel(plotOutput("Hist_ABV"))
+        mainPanel(plotOutput("hist"))
     )
 ))
