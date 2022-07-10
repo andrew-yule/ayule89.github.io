@@ -22,13 +22,18 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
+          selectInput("uiState", "Select state:", choices = add_row(arrange(unique(select(beers, State)), State), State = "All", .before = 1)),
           radioButtons("uiIBUOrABV", "IBU or ABV:", choices = c("IBU", "ABV"), inline = TRUE),
           radioButtons("uiHistOrBox", "Histogram or BoxPlot:", choices = c("Histogram", "BoxPlot"), inline = TRUE),
           sliderInput("uiBins", "Number of bins:", min = 1, max = 50, value = 30),
-          selectInput("uiState", "Select state:", choices = add_row(arrange(unique(select(beers, State)), State), State = "All", .before = 1))
+          radioButtons("uiIncludeTrendLineQ", "Include trend line on scatter plot:", choices = c("True", "False"), inline = TRUE)
         ),
 
         # Show a plot of the generated distribution
-        mainPanel(plotOutput("plot"))
+        mainPanel(
+          plotOutput("plot"),
+          plotOutput("plot2"),
+          plotOutput("plot3")
+        )
     )
 ))

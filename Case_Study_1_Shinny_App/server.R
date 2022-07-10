@@ -27,8 +27,26 @@ filterData = function(state = "All"){
   }
 }
 
+# Helper function for getting IPA and Ales
+getIPAsAndAles = function(state = "All"){
+  ipa = filterData(state) |>
+    filter(!is.na(ABV) & !is.na(IBU)) |>
+    filter(str_detect(Style, "(?:IPA|India.*Pale.*Ale)")) |>
+    select(ABV, IBU) |>
+    mutate(Style = "IPA")
+  
+  ales = filterData(state) |>
+    filter(!is.na(ABV) & !is.na(IBU)) |>
+    anti_join(ipa) |>
+    filter(str_detect(Style, "Ale")) |>
+    select(ABV, IBU) |>
+    mutate(Style = "Ale")
+  
+  ipaAndAles = full_join(ipa, ales)  
+}
+
 # Helper function for creating the ggplot object to be displayed by renderPlot
-createPlot = function(var = "IBU", histOrBox = "Histogram", binCount = 30, state = "All"){
+createDistributionPlot = function(var = "IBU", histOrBox = "Histogram", binCount = 30, state = "All"){
   plot = if(var == "IBU" && histOrBox == "Histogram") {
     ggplot(filterData(state), aes(x = IBU)) +
       geom_histogram(fill = "#C80F2D", bins = binCount) +
@@ -50,11 +68,36 @@ createPlot = function(var = "IBU", histOrBox = "Histogram", binCount = 30, state
   return(plot)
 }
 
+# Helper function for creating the ggplot object to be displayed by renderPlot
+createScatterPlot = function(state = "All", includeTrendLineQ = "True"){
+  plot = if(includeTrendLineQ == "True") {
+    ggplot(filterData(state), aes(x = IBU, y = ABV)) +
+      geom_point(fill = "#C80F2D") + 
+      geom_smooth(method = "lm") +
+      labs(title = "Relationship Between IBU and ABV")
+  } else {
+      ggplot(filterData(state), aes(x = IBU, y = ABV)) +
+        geom_point(fill = "#C80F2D") +
+      labs(title = "Relationship Between IBU and ABV")
+    }
+  
+  return(plot)
+}
+
+# Helper function for creating the ggplot object to be displayed by renderPlot
+createIPAPlot = function(state = "All"){
+  data = getIPAsAndAles(state)
+  plot = data |>
+    ggplot(aes(x = IBU, y = ABV, color = Style)) +
+    geom_point(size = 3) +
+    labs(x = "IBU", y = "ABV (%)", title = "Relationship Between IBU and ABV", subtitle = "Broken Down By IPA's and Ale's")
+  
+  return(plot)
+}
+
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  output$plot <- renderPlot({
-    # Draw the histogram with the specified number of bins based on user's preference for IBU or ABV
-    plot = createPlot(input$uiIBUOrABV, input$uiHistOrBox, input$uiBins, input$uiState)
-    plot
-  })
+  output$plot = renderPlot({createDistributionPlot(input$uiIBUOrABV, input$uiHistOrBox, input$uiBins, input$uiState)})
+  output$plot2 = renderPlot({createScatterPlot(input$uiState, input$uiIncludeTrendLineQ)})
+  output$plot3 = renderPlot({createIPAPlot(input$uiState)})
 })
