@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-To view an interactive shinny app of a portion of this analysis please visit this [here](www.google.com).
+To view an interactive shinny app of a portion of this analysis please visit this [here](https://ayule89.shinyapps.io/Case_Study_1_Shinny_App/).
 
 ```{r include=TRUE, echo=TRUE, results='hide', error=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
