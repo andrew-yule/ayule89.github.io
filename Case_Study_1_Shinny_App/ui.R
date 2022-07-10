@@ -7,7 +7,11 @@
 #    http://shiny.rstudio.com/
 #
 
+library(tidyverse)
 library(shiny)
+
+# Load the beers data set
+beers = read_csv("https://raw.githubusercontent.com/ayule89/ayule89.github.io/master/Data/beers.csv")
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -20,7 +24,8 @@ shinyUI(fluidPage(
         sidebarPanel(
           radioButtons("uiIBUOrABV", "IBU or ABV:", choices = c("IBU", "ABV"), inline = TRUE),
           radioButtons("uiHistOrBox", "Histogram or BoxPlot:", choices = c("Histogram", "BoxPlot"), inline = TRUE),
-          sliderInput("uiBins", "Number of bins:", min = 1, max = 50, value = 30)
+          sliderInput("uiBins", "Number of bins:", min = 1, max = 50, value = 30),
+          selectInput("uiState", "Select state:", choices = add_row(arrange(unique(select(beers, State)), State), State = "All", .before = 1))
         ),
 
         # Show a plot of the generated distribution
