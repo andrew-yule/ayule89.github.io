@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrew Yule">
+<meta name="dcterms.date" content="2022-08-05">
+
+<title>Andrew Yule - Employee Attrition</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Andrew Yule</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Budweiser - Beer and Brewery Analysis - Andrew Yule.html">SMU DDS Case Study 1</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./SMU_DDS_CaseStudy2.html" aria-current="page">SMU DDS Case Study 2</a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary">Executive Summary</a></li>
+  <li><a href="#libraries-and-data-loading" id="toc-libraries-and-data-loading" class="nav-link" data-scroll-target="#libraries-and-data-loading">Libraries and Data Loading</a></li>
+  <li><a href="#identifying-the-top-three-factors-that-contribute-to-attrition" id="toc-identifying-the-top-three-factors-that-contribute-to-attrition" class="nav-link" data-scroll-target="#identifying-the-top-three-factors-that-contribute-to-attrition">1. Identifying the top three factors that contribute to attrition</a></li>
+  <li><a href="#learn-about-any-job-role-specific-trends-that-may-exist-in-the-data-set" id="toc-learn-about-any-job-role-specific-trends-that-may-exist-in-the-data-set" class="nav-link" data-scroll-target="#learn-about-any-job-role-specific-trends-that-may-exist-in-the-data-set">2. Learn about any job role specific trends that may exist in the data set</a></li>
+  <li><a href="#provide-any-other-interesting-trends-and-observations-from-your-analysis" id="toc-provide-any-other-interesting-trends-and-observations-from-your-analysis" class="nav-link" data-scroll-target="#provide-any-other-interesting-trends-and-observations-from-your-analysis">3. Provide any other interesting trends and observations from your analysis</a></li>
+  <li><a href="#build-models-to-predict-attrition-and-salary" id="toc-build-models-to-predict-attrition-and-salary" class="nav-link" data-scroll-target="#build-models-to-predict-attrition-and-salary">4. Build models to predict attrition and salary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Employee Attrition</h1>
+<p class="subtitle lead">An Analysis of Factors Leading to Employee Turnover</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andrew Yule </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 5, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<p>A link to my youtube video discussing this analysis can be found <a href="https://youtu.be/PLQkg_tmZhs">here</a></p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The specific goals of this analysis are to:</p>
+<ol type="1">
+<li><p>Identify the top three factors that contribute to attrition.</p></li>
+<li><p>Learn about any job role specific trends that may exist in the data set (e.g., “Data Scientists have the highest job satisfaction”).</p></li>
+<li><p>Provide any other interesting trends and observations from the analysis.</p></li>
+<li><p>Build models to predict attrition and salaries and then utilizing those models on a blind data set.</p></li>
+</ol>
+</section>
+<section id="executive-summary" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
+<p>Upon completing this analysis, it was learned that the top 3 factors contributing to employee attrition were:</p>
+<ol type="1">
+<li>Job Role<br>
+</li>
+<li>Stock Option Level<br>
+</li>
+<li>Over Time</li>
+</ol>
+<p>This information was obtained by determining the Pseudo-RSquared parameter for each variable in the data set. The Pseudo-RSquared parameter is a comparison of the likelihood for an outcome given the data as compared to a reference or null model. In this case the null model was the breakdown of attrition across the entire data set, which was roughly 16%.</p>
+<p>Next, a naive-bayes model was constructed using the top 16 variables as ranked by the Pseudo-RSquared. This allowed for a model that achieved an accuracy of 80%, a sensitivity of 84%, and a specificity of 61%.</p>
+<p>Finally, a linear regression model was used with Age, Job Role, Years at Company, and Stock Option variables to achieve an RSquared of 0.85 and a root mean squared error of $1,850.</p>
+</section>
+<section id="libraries-and-data-loading" class="level2">
+<h2 class="anchored" data-anchor-id="libraries-and-data-loading">Libraries and Data Loading</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(class)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>employeeData <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/ayule89/SMU_DDS_CaseStudy2/main/Data/CaseStudy2-data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="identifying-the-top-three-factors-that-contribute-to-attrition" class="level2">
+<h2 class="anchored" data-anchor-id="identifying-the-top-three-factors-that-contribute-to-attrition">1. Identifying the top three factors that contribute to attrition</h2>
+<p>How many of the 870 employees in the data actually left? There were 140 out of 870 employees (16%) that left.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>employeeData <span class="sc">|&gt;</span> <span class="fu">count</span>(Attrition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  Attrition     n
+  &lt;chr&gt;     &lt;int&gt;
+1 No          730
+2 Yes         140</code></pre>
+</div>
+</div>
+<p>There are a number of variables that could attribute to employee attrition. We will first visually screen each of the variables to look for potential leading indicators. The full list of variables includes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(employeeData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "ID"                       "Age"                     
+ [3] "Attrition"                "BusinessTravel"          
+ [5] "DailyRate"                "Department"              
+ [7] "DistanceFromHome"         "Education"               
+ [9] "EducationField"           "EmployeeCount"           
+[11] "EmployeeNumber"           "EnvironmentSatisfaction" 
+[13] "Gender"                   "HourlyRate"              
+[15] "JobInvolvement"           "JobLevel"                
+[17] "JobRole"                  "JobSatisfaction"         
+[19] "MaritalStatus"            "MonthlyIncome"           
+[21] "MonthlyRate"              "NumCompaniesWorked"      
+[23] "Over18"                   "OverTime"                
+[25] "PercentSalaryHike"        "PerformanceRating"       
+[27] "RelationshipSatisfaction" "StandardHours"           
+[29] "StockOptionLevel"         "TotalWorkingYears"       
+[31] "TrainingTimesLastYear"    "WorkLifeBalance"         
+[33] "YearsAtCompany"           "YearsInCurrentRole"      
+[35] "YearsSinceLastPromotion"  "YearsWithCurrManager"    </code></pre>
+</div>
+</div>
+<p>Before investigating attrition across each variable, some of the numerical scales will need to put into various bins to make analysis easier. In order to determine appropriate bins, we’ll first plot histograms of the numerical variables, which include: Age, DailyRate, DistanceFromHome, HourlyRate, MonthlyIncome, MonthlyRate, TotalWorkingYears, YearsAtCompany, YearsInCurrentRole, YearsSinceLastPromotion, YearsWithCurrManager.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>employeeData <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Age, DailyRate, DistanceFromHome, HourlyRate, MonthlyIncome, MonthlyRate, TotalWorkingYears, YearsAtCompany, YearsInCurrentRole, YearsSinceLastPromotion, YearsWithCurrManager) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"column"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>column, <span class="at">scales =</span> <span class="st">'free'</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on visually inspecting the histograms, the following bins for various numerical variables will be used below. In addition, we’ll change the Attrition values from strings to doubles with Yes/No being 1/0 respectively.</p>
+<ul>
+<li>Age (5 years)<br>
+</li>
+<li>Daily rate (400 dollars)<br>
+</li>
+<li>Distance from home (5 miles)<br>
+</li>
+<li>Hourly rate (20 dollars)<br>
+</li>
+<li>Monthly income (5,000 dollars)<br>
+</li>
+<li>Monthly rate (5,000 dollars)</li>
+<li>Total working years (5 years)<br>
+</li>
+<li>Years at company (5 years)<br>
+</li>
+<li>Years in current role (5 years)<br>
+</li>
+<li>Years since last promotion (5 years)<br>
+</li>
+<li>Years under current manager (5 years)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>employeeDataBinned <span class="ot">=</span> employeeData <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age =</span> <span class="fu">round</span>(Age<span class="sc">/</span><span class="dv">5</span>)<span class="sc">*</span><span class="dv">5</span>, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">DailyRate =</span> <span class="fu">round</span>(DailyRate<span class="sc">/</span><span class="dv">400</span>)<span class="sc">*</span><span class="dv">400</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">DistanceFromHome =</span> <span class="fu">round</span>(DistanceFromHome<span class="sc">/</span><span class="dv">5</span>)<span class="sc">*</span><span class="dv">5</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">HourlyRate =</span> <span class="fu">round</span>(HourlyRate<span class="sc">/</span><span class="dv">20</span>)<span class="sc">*</span><span class="dv">20</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">MonthlyIncome =</span> <span class="fu">round</span>(MonthlyIncome<span class="sc">/</span><span class="dv">5000</span>)<span class="sc">*</span><span class="dv">5000</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">MonthlyRate =</span> <span class="fu">round</span>(MonthlyRate<span class="sc">/</span><span class="dv">5000</span>)<span class="sc">*</span><span class="dv">5000</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">TotalWorkingYears =</span> <span class="fu">round</span>(TotalWorkingYears<span class="sc">/</span><span class="dv">5</span>)<span class="sc">*</span><span class="dv">5</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">YearsAtCompany =</span> <span class="fu">round</span>(YearsAtCompany<span class="sc">/</span><span class="dv">5</span>)<span class="sc">*</span><span class="dv">5</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">YearsInCurrentRole =</span> <span class="fu">round</span>(YearsInCurrentRole<span class="sc">/</span><span class="dv">5</span>)<span class="sc">*</span><span class="dv">5</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">YearsSinceLastPromotion =</span> <span class="fu">round</span>(YearsSinceLastPromotion<span class="sc">/</span><span class="dv">5</span>)<span class="sc">*</span><span class="dv">5</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">YearsWithCurrManager =</span> <span class="fu">round</span>(YearsWithCurrManager<span class="sc">/</span><span class="dv">5</span>)<span class="sc">*</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we’ll go through and create plots of each variable showing the breakdown between attrition to visually look for any strong relationships</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to create a plot showing the breakdown in attrition for a given variable across it's possible values</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>findAttritionBreakdown <span class="ot">=</span> <span class="cf">function</span>(df, colName) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(colName)) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(Attrition) <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">!!</span><span class="fu">sym</span>(colName), <span class="at">y =</span> n, <span class="at">fill =</span> Attrition)) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> colName, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Attrition Fraction"</span>) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.55</span>))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Test the function</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#findAttritionBreakdown(employeeDataBinned, "DistanceFromHome")</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">=</span> <span class="fu">colnames</span>(employeeData)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop columns that we don't want to include in the analysis (ID, Attrition, EmployeeCount, EmployeeNumber, Over18, StandardHours) </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">=</span> cols[<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">10</span>, <span class="sc">-</span><span class="dv">11</span>, <span class="sc">-</span><span class="dv">23</span>, <span class="sc">-</span><span class="dv">28</span>)]</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list of plots across all of the columns using the map function from the purr package</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">=</span> <span class="fu">map</span>(cols, <span class="cf">function</span>(col) <span class="fu">findAttritionBreakdown</span>(employeeDataBinned, col))</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Display plots on one page</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(<span class="at">grobs =</span> plots, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<p>Based on examining the plots above, the following key variables were identified as likely having higher impacts on employee attrition:</p>
+<ul>
+<li>Age<br>
+</li>
+<li>BusinessTravel<br>
+</li>
+<li>DistanceFromHome<br>
+</li>
+<li>Education<br>
+</li>
+<li>EnvironmentSatisfaction<br>
+</li>
+<li>JobInvolvment<br>
+</li>
+<li>JobRole<br>
+</li>
+<li>JobSatisfaction<br>
+</li>
+<li>MaritalStatus<br>
+</li>
+<li>MonthlyIncome<br>
+</li>
+<li>NumCompaniesWorked<br>
+</li>
+<li>OverTime<br>
+</li>
+<li>StockOptionLevel<br>
+</li>
+<li>TotalWorkingYears<br>
+</li>
+<li>WorkLifeBalance<br>
+</li>
+<li>YearsAtCompany<br>
+</li>
+<li>YearsWithCurrManager</li>
+</ul>
+<p>In order to determine the top 3 factors quantitatively, we will calculate the Pseudo-R2 value for each predictor. This is based on a similar analysis that can be found <a href="https://heap.io/blog/pseudo-r2-a-metric-for-quantifying-interestingness">here</a>.</p>
+<p>The main idea is that we first start with a Null model, or a baseline model, that can be used to determine the likelihood of attrition. Once that is established, then additional factors can be evaluated against this Null model using their likelihood to look for improvements or increases in the likelihood. In this case, because the likelihoods can be quite large, loglikelihood values will be used.</p>
+<p>The Null model in this case will simply be the LogLikelihood of attrition in the entire data set or -383.8.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>calcLogLikelihoodData <span class="ot">=</span> <span class="cf">function</span>(data){</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  no <span class="ot">=</span> <span class="fu">select</span>(<span class="fu">filter</span>(data, Attrition <span class="sc">==</span> <span class="dv">0</span>), n)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  yes <span class="ot">=</span> <span class="fu">select</span>(<span class="fu">filter</span>(data, Attrition <span class="sc">==</span> <span class="dv">1</span>), n)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">dim</span>(yes)[<span class="dv">1</span>] <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> <span class="fu">dim</span>(no)[<span class="dv">1</span>] <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">tibble</span>(<span class="at">n =</span> <span class="fu">c</span>(<span class="dv">0</span>)))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>{</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">=</span> yes<span class="sc">/</span>(yes <span class="sc">+</span> no)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(p<span class="sc">^</span>yes <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">^</span>no)  </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>employeeDataBinnedWithQuantitativeAttrition <span class="ot">=</span> employeeDataBinned <span class="sc">|&gt;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Attrition =</span> <span class="fu">ifelse</span>(Attrition <span class="sc">==</span> <span class="st">"Yes"</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>nullModel <span class="ot">=</span> <span class="fu">calcLogLikelihoodData</span>(<span class="fu">count</span>(employeeDataBinnedWithQuantitativeAttrition, Attrition))</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>calcPseudoRSquared <span class="ot">=</span> <span class="cf">function</span>(var){</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  employeeDataBinnedWithQuantitativeAttrition <span class="sc">|&gt;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(var)) <span class="sc">|&gt;</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(Attrition) <span class="sc">|&gt;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_modify</span>(<span class="cf">function</span>(group, blah) <span class="fu">calcLogLikelihoodData</span>(<span class="fu">select</span>(group, Attrition, n))) <span class="sc">|&gt;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(n) <span class="sc">|&gt;</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    (<span class="cf">function</span>(ll) (<span class="dv">1</span><span class="sc">-</span>ll<span class="sc">/</span>nullModel<span class="sc">$</span>n)<span class="sc">*</span><span class="dv">100</span>)()</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Test</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co">#calcPseudoRSquared("Age")</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Pseudo-R2 for all variables</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>pseudoRSquared <span class="ot">=</span> <span class="fu">tibble</span>(<span class="st">"Variable"</span> <span class="ot">=</span> cols) <span class="sc">|&gt;</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PseudoRSquared =</span> <span class="fu">calcPseudoRSquared</span>(Variable))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Display the pseudo-RSquared values for each variable, sorting by the highest to more easily identify top factors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pseudoRSquared <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PseudoRSquared, <span class="at">y =</span> <span class="fu">fct_reorder</span>(Variable, PseudoRSquared))) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Pseudo-RSquared"</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">"Pseudo-RSquared Values for Each Variable"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on the analysis above, the top 3 factors influencing employee attrition are:</p>
+<ol type="1">
+<li>Job Role<br>
+</li>
+<li>Stock Option Level<br>
+</li>
+<li>Over Time</li>
+</ol>
+<p>The next 3 factors following the top 3 are:</p>
+<ol type="1">
+<li>Total Working Years<br>
+</li>
+<li>Years At Company<br>
+</li>
+<li>Monthly Income</li>
+</ol>
+</section>
+<section id="learn-about-any-job-role-specific-trends-that-may-exist-in-the-data-set" class="level2">
+<h2 class="anchored" data-anchor-id="learn-about-any-job-role-specific-trends-that-may-exist-in-the-data-set">2. Learn about any job role specific trends that may exist in the data set</h2>
+<p>We know that Job Role is our number one predictor of employee attrition. Looking closer at various reported job roles, it is clear that sales type positions see much larger amounts of turnover while managing and director type roles see very little.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>employeeData <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(JobRole) <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">AttritionPct =</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(Attrition <span class="sc">==</span> <span class="st">"No"</span>, <span class="dv">0</span>, <span class="dv">1</span>))<span class="sc">/</span><span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> AttritionPct, <span class="at">y =</span> <span class="fu">reorder</span>(JobRole, AttritionPct))) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Attrition Percentage Across Various Job Roles"</span>, <span class="at">x =</span> <span class="st">"Attrition Percentage"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Knowing that stock options, working over time, and monthly income are also key indicators of attrition, we can use those to better understand why sales positions see higher attrition.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Looking at stock options</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>employeeDataBinnedWithQuantitativeAttrition <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">JobRole =</span> <span class="fu">factor</span>(JobRole, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sales Representative"</span>, <span class="st">"Human Resources"</span>, <span class="st">"Laboratory Technician"</span>, <span class="st">"Research Scientist"</span>, <span class="st">"Sales Executive"</span>, <span class="st">"Healthcare Representative"</span>, <span class="st">"Manager"</span>, <span class="st">"Manufacturing Director"</span>, <span class="st">"Research Director"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(JobRole) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(StockOptionLevel) <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> JobRole, <span class="at">y =</span> n, <span class="at">fill =</span> StockOptionLevel)) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Stock Option Breakdown Across Various Job Roles"</span>, <span class="at">y =</span> <span class="st">"Fraction of Each Option Level"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Looking at over time</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>employeeDataBinnedWithQuantitativeAttrition <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">JobRole =</span> <span class="fu">factor</span>(JobRole, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sales Representative"</span>, <span class="st">"Human Resources"</span>, <span class="st">"Laboratory Technician"</span>, <span class="st">"Research Scientist"</span>, <span class="st">"Sales Executive"</span>, <span class="st">"Healthcare Representative"</span>, <span class="st">"Manager"</span>, <span class="st">"Manufacturing Director"</span>, <span class="st">"Research Director"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(JobRole) <span class="sc">|&gt;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(OverTime) <span class="sc">|&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> JobRole, <span class="at">y =</span> n, <span class="at">fill =</span> OverTime)) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Over Time Breakdown Across Various Job Roles"</span>, <span class="at">y =</span> <span class="st">"Fraction of Over Time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Looking at monthly income</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>employeeData <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">JobRole =</span> <span class="fu">factor</span>(JobRole, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sales Representative"</span>, <span class="st">"Human Resources"</span>, <span class="st">"Laboratory Technician"</span>, <span class="st">"Research Scientist"</span>, <span class="st">"Sales Executive"</span>, <span class="st">"Healthcare Representative"</span>, <span class="st">"Manager"</span>, <span class="st">"Manufacturing Director"</span>, <span class="st">"Research Director"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> JobRole, <span class="at">y =</span> MonthlyIncome)) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distributions of Monthly Income Across Various Job Roles"</span>, <span class="at">y =</span> <span class="st">"Monthly Income"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-11-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Analyzing Sales Representatives individually we see that they rank very highly in all of the categories that contribute the most to attrition. They generally have a proportionally smaller amount of stock options, they work slightly more over time than most other positions with the exception of research scientist, and they are the lowest paid.</p>
+</section>
+<section id="provide-any-other-interesting-trends-and-observations-from-your-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="provide-any-other-interesting-trends-and-observations-from-your-analysis">3. Provide any other interesting trends and observations from your analysis</h2>
+<p>Let’s look at some of the quantitative variables to look for any interesting trends.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>employeeData <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Age, DistanceFromHome, Education, JobInvolvement, JobLevel, JobSatisfaction, MonthlyIncome, NumCompaniesWorked, PercentSalaryHike, PerformanceRating, RelationshipSatisfaction, TotalWorkingYears, TrainingTimesLastYear, WorkLifeBalance, YearsAtCompany, YearsInCurrentRole, YearsSinceLastPromotion, YearsWithCurrManager) <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>() <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Var1, <span class="at">y=</span>Var2, <span class="at">fill=</span>value)) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Correlation Matrix Between Various Numerical Indicators"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the above correlation heat map, we can make the following observations:</p>
+<ul>
+<li>Years at company, years in current role, years since last promotion, and years with current manager are all closely related as they all generally give an indication of how long a particular employee has been at the current job<br>
+</li>
+<li>High performance rating is correlated with higher salary hikes<br>
+</li>
+<li>There were no strong correlations for work life balance, which could mean there are other non-numerical indicators for work life balance, or it just depends on the individual</li>
+</ul>
+</section>
+<section id="build-models-to-predict-attrition-and-salary" class="level2">
+<h2 class="anchored" data-anchor-id="build-models-to-predict-attrition-and-salary">4. Build models to predict attrition and salary</h2>
+<p>To predict attrition, a naive Bayes model was used with the goal of reaching the highest accuracy while preserving at least 60% for sensitivity and specificity. After cross-validating the model using a 75/25 train/test split and utilizing 16 of the top 30 predicting variables, the respective achievable accuracy, sensitivity, and specificity was found to be 80%, 84%, and 61%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>employeeDataForPrediction <span class="ot">=</span> employeeData <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>ID, <span class="sc">-</span>EmployeeCount, <span class="sc">-</span>EmployeeNumber, <span class="sc">-</span>Over18, <span class="sc">-</span>StandardHours)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>evaluateModel <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">=</span> <span class="fu">length</span>(employeeDataForPrediction<span class="sc">$</span>Attrition)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  indicies <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>l), <span class="fu">round</span>(<span class="fl">0.75</span><span class="sc">*</span>l))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">=</span> employeeDataForPrediction[indicies,]</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">=</span> employeeDataForPrediction[<span class="sc">-</span>indicies,]</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">=</span> <span class="fu">naiveBayes</span>(Attrition <span class="sc">~</span> JobRole <span class="sc">+</span> StockOptionLevel <span class="sc">+</span> OverTime <span class="sc">+</span> TotalWorkingYears <span class="sc">+</span> YearsAtCompany <span class="sc">+</span> MonthlyIncome <span class="sc">+</span> JobLevel <span class="sc">+</span> Age <span class="sc">+</span> MaritalStatus <span class="sc">+</span> JobInvolvement <span class="sc">+</span> YearsInCurrentRole <span class="sc">+</span> NumCompaniesWorked <span class="sc">+</span> YearsWithCurrManager <span class="sc">+</span> PercentSalaryHike <span class="sc">+</span> WorkLifeBalance <span class="sc">+</span> JobSatisfaction, train)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  predictions <span class="ot">=</span> <span class="fu">predict</span>(model, <span class="fu">select</span>(test, JobRole, StockOptionLevel, OverTime, TotalWorkingYears, YearsAtCompany, MonthlyIncome, JobLevel, Age, MaritalStatus, JobInvolvement, YearsInCurrentRole, NumCompaniesWorked, YearsWithCurrManager, PercentSalaryHike, WorkLifeBalance, JobSatisfaction))</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">=</span> <span class="fu">confusionMatrix</span>(<span class="fu">table</span>(predictions, test<span class="sc">$</span>Attrition))</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  acc <span class="ot">=</span> <span class="fu">as.numeric</span>(results<span class="sc">$</span>overall[<span class="dv">1</span>])</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  sen <span class="ot">=</span> <span class="fu">sensitivity</span>(<span class="fu">table</span>(predictions, test<span class="sc">$</span>Attrition))</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  spc <span class="ot">=</span> <span class="fu">specificity</span>(<span class="fu">table</span>(predictions, test<span class="sc">$</span>Attrition))</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">tibble</span>(<span class="st">"Accuracy"</span> <span class="ot">=</span> <span class="fu">c</span>(acc), <span class="st">"Sensitivity"</span> <span class="ot">=</span> <span class="fu">c</span>(sen), <span class="st">"Specificity "</span> <span class="ot">=</span> <span class="fu">c</span>(spc)))</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">tibble</span>(<span class="st">"Accuracy"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">NULL</span>), <span class="st">"Sensitivity"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">NULL</span>), <span class="st">"Specificity "</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">NULL</span>))</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (variable <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>) {</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">=</span> <span class="fu">rbind</span>(results, <span class="fu">evaluateModel</span>())</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Variable, <span class="at">y =</span> Value)) <span class="sc">+</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Attrition Model Achievable Key Metrics"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Predicting attrition on the blind test set and then outputting to a csv file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>blindTestData <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/ayule89/SMU_DDS_CaseStudy2/main/Data/CaseStudy2CompSet%20No%20Attrition.csv"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">naiveBayes</span>(Attrition <span class="sc">~</span> JobRole <span class="sc">+</span> StockOptionLevel <span class="sc">+</span> OverTime <span class="sc">+</span> TotalWorkingYears <span class="sc">+</span> YearsAtCompany <span class="sc">+</span> MonthlyIncome <span class="sc">+</span> JobLevel <span class="sc">+</span> Age <span class="sc">+</span> MaritalStatus <span class="sc">+</span> JobInvolvement <span class="sc">+</span> YearsInCurrentRole <span class="sc">+</span> NumCompaniesWorked <span class="sc">+</span> YearsWithCurrManager <span class="sc">+</span> PercentSalaryHike <span class="sc">+</span> WorkLifeBalance <span class="sc">+</span> JobSatisfaction, employeeDataForPrediction)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">=</span> <span class="fu">predict</span>(model, <span class="fu">select</span>(blindTestData, JobRole, StockOptionLevel, OverTime, TotalWorkingYears, YearsAtCompany, MonthlyIncome, JobLevel, Age, MaritalStatus, JobInvolvement, YearsInCurrentRole, NumCompaniesWorked, YearsWithCurrManager, PercentSalaryHike, WorkLifeBalance, JobSatisfaction))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>blindTestResults <span class="ot">=</span> <span class="fu">tibble</span>(<span class="st">"ID"</span> <span class="ot">=</span> blindTestData<span class="sc">$</span>ID, <span class="st">"Attrition"</span> <span class="ot">=</span> predictions)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(blindTestResults,<span class="st">"/Users/andrewyule/Dropbox/Personal/SMU MSDS/03 - Doing Data Science/SMU_DDS_CaseStudy2/Case 2 Predictions Yule Attrition.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To predict salaries, a linear regression model was used. The goal was to achieve a high R Squared value and minimal root mean squared error (RMSE), while keeping the number of predictors as low as possible. The variables, Age, Job Role, Years At Company, and Stock Options were found to be good in predicting salary and lead to a model with an RSquared of around 0.85 and a RMSE of $1,850.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> <span class="cf">function</span>(actual, predicted) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>((actual <span class="sc">-</span> predicted)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>evaluateModel <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">=</span> <span class="fu">length</span>(employeeData<span class="sc">$</span>MonthlyIncome)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  indicies <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>l), <span class="fu">round</span>(<span class="fl">0.75</span><span class="sc">*</span>l))</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">=</span> employeeData[indicies,]</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">=</span> employeeData[<span class="sc">-</span>indicies,]</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">=</span> <span class="fu">lm</span>(MonthlyIncome <span class="sc">~</span> Age <span class="sc">+</span> JobRole <span class="sc">+</span> YearsAtCompany <span class="sc">+</span> StockOptionLevel <span class="sc">+</span> PerformanceRating, <span class="at">data =</span> train)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  predictions <span class="ot">=</span> <span class="fu">predict</span>(model, test)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="st">"RSquared"</span> <span class="ot">=</span> <span class="fu">summary</span>(model)<span class="sc">$</span>r.squared, <span class="st">"RMSE"</span> <span class="ot">=</span> <span class="fu">rmse</span>(test<span class="sc">$</span>MonthlyIncome, predictions))</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">tibble</span>(<span class="st">"RSquared"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">NULL</span>), <span class="st">"RMSE"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">NULL</span>))</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (variable <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>) {</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">=</span> <span class="fu">rbind</span>(results, <span class="fu">evaluateModel</span>())</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Variable, <span class="at">y =</span> Value)) <span class="sc">+</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Variable, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SMU_DDS_CaseStudy2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Predicting attrition on the blind test set and then outputting to a csv file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>blindTestData <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/ayule89/SMU_DDS_CaseStudy2/main/Data/CaseStudy2CompSet%20No%20Salary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 300 Columns: 35
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (9): Attrition, BusinessTravel, Department, EducationField, Gender, Job...
+dbl (26): ID, Age, DailyRate, DistanceFromHome, Education, EmployeeCount, Em...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(MonthlyIncome <span class="sc">~</span> Age <span class="sc">+</span> JobRole <span class="sc">+</span> YearsAtCompany <span class="sc">+</span> StockOptionLevel <span class="sc">+</span> PerformanceRating, <span class="at">data =</span> employeeData)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">=</span> <span class="fu">predict</span>(model, blindTestData)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>blindTestResults <span class="ot">=</span> <span class="fu">tibble</span>(<span class="st">"ID"</span> <span class="ot">=</span> blindTestData<span class="sc">$</span>ID, <span class="st">"MonthlyIncome"</span> <span class="ot">=</span> predictions)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(blindTestResults,<span class="st">"/Users/andrewyule/Dropbox/Personal/SMU MSDS/03 - Doing Data Science/SMU_DDS_CaseStudy2/Case 2 Predictions Yule Salary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

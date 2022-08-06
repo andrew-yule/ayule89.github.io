@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "Andrew Yule"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: "Budweiser - Beer and Brewery Analysis - Andrew Yule.Rmd"
+        text: "SMU DDS Case Study 1"
+      - href: SMU_DDS_CaseStudy2.qmd
+        text: "SMU DDS Case Study 2"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+
