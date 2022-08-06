@@ -7,6 +7,13 @@
     "text": "A link to my youtube video discussing this analysis can be found here"
   },
   {
+    "objectID": "SMU_DDS_CaseStudy2.html#introduction",
+    "href": "SMU_DDS_CaseStudy2.html#introduction",
+    "title": "Employee Attrition",
+    "section": "Introduction",
+    "text": "Introduction\nThe specific goals of this analysis are to:\n\nIdentify the top three factors that contribute to attrition.\nLearn about any job role specific trends that may exist in the data set (e.g., “Data Scientists have the highest job satisfaction”).\nProvide any other interesting trends and observations from the analysis.\nBuild models to predict attrition and salaries and then utilizing those models on a blind data set."
+  },
+  {
     "objectID": "SMU_DDS_CaseStudy2.html#executive-summary",
     "href": "SMU_DDS_CaseStudy2.html#executive-summary",
     "title": "Employee Attrition",
@@ -75,12 +82,5 @@
     "title": "ayule89.github.io",
     "section": "",
     "text": "To learn more about Quarto websites visit https://quarto.org/docs/websites."
-  },
-  {
-    "objectID": "SMU_DDS_CaseStudy2.html#introduction",
-    "href": "SMU_DDS_CaseStudy2.html#introduction",
-    "title": "Employee Attrition",
-    "section": "Introduction",
-    "text": "Introduction\nThe specific goals of this analysis are to:\n\nIdentify the top three factors that contribute to attrition.\nLearn about any job role specific trends that may exist in the data set (e.g., “Data Scientists have the highest job satisfaction”).\nProvide any other interesting trends and observations from the analysis.\nBuild models to predict attrition and salaries and then utilizing those models on a blind data set."
   }
 ]
