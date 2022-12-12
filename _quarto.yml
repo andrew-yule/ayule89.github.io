@@ -11,7 +11,7 @@ website:
         text: "SMU DDS Case Study 1"
       - href: SMU_DDS_CaseStudy2.qmd
         text: "SMU DDS Case Study 2"
-      - href: MSDS-6371-Project---Yule-and-Kondakindi.pdf
+      - href: MSDS_6371_Project_Yule_and_Kondakindi.qmd
         text: "MSDS 6371 Project"
 
 format:
